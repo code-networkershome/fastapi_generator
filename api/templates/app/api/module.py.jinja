@@ -1,0 +1,12 @@
+from fastapi import APIRouter, HTTPException
+from ..schemas import {{ module|capitalize }}Base
+
+router = APIRouter()
+
+@router.get("/")
+async def get_{{ module }}s():
+    return {"message": "List of {{ module }}s"}
+
+@router.post("/")
+async def create_{{ module }}(data: {{ module|capitalize }}Base):
+    return {"message": "{{ module|capitalize }} created", "data": data}

@@ -1,0 +1,14 @@
+from fastapi import APIRouter, HTTPException, UploadFile, File
+from ..schemas import IngestResponse
+from ..core.vector_store import store_embeddings
+
+router = APIRouter()
+
+@router.post("/", response_model=IngestResponse)
+async def ingest_endpoint(text: str):
+    try:
+        # Ingest logic using {{ cps.embedding_model }} and {{ cps.vector_store }}
+        await store_embeddings(text)
+        return IngestResponse(status="success", message="Content ingested into {{ cps.vector_store }}")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

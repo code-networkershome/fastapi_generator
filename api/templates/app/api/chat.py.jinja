@@ -1,0 +1,14 @@
+from fastapi import APIRouter, HTTPException
+from ..schemas import ChatRequest, ChatResponse
+from ..core.llm import get_llm_client
+
+router = APIRouter()
+
+@router.post("/", response_model=ChatResponse)
+async def chat_endpoint(request: ChatRequest):
+    client = get_llm_client()
+    try:
+        # Chat logic here
+        return ChatResponse(reply="This is a mock reply from {{ cps.project_name }}")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

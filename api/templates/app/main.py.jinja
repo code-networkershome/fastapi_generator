@@ -1,0 +1,33 @@
+from fastapi import FastAPI
+from .api import chat, ingest, query
+from .core import llm
+
+app = FastAPI(title="{{ cps.project_name }}", description="{{ cps.description }}")
+
+{% if cps.mode == "rag_only" %}
+app.include_router(ingest.router, prefix="/ingest", tags=["ingest"])
+app.include_router(query.router, prefix="/query", tags=["query"])
+{% elif cps.features.chat %}
+app.include_router(chat.router, prefix="/chat", tags=["chat"])
+{% endif %}
+
+{% for module in cps.modules %}
+from .api import {{ module }}
+app.include_router({{ module }}.router, prefix="/{{ module }}", tags=["{{ module }}"])
+{% endfor %}
+
+@app.get("/")
+async def root():
+    return {"message": "Welcome to {{ cps.project_name }} API"}
+
+{% for endpoint in cps.endpoints %}
+{% set func_name = endpoint.path.strip('/').replace('/', '_') or 'custom_endpoint_' ~ loop.index %}
+@app.{{ endpoint.method | lower }}("{{ endpoint.path }}")
+async def {{ func_name }}():
+    {% if endpoint.uses_llm %}
+    # This endpoint uses LLM
+    return {"message": "Calling LLM for {{ endpoint.path }}"}
+    {% else %}
+    return {"message": "Success for {{ endpoint.path }}"}
+    {% endif %}
+{% endfor %}

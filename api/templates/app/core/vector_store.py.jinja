@@ -1,0 +1,10 @@
+import os
+
+async def store_embeddings(text: str):
+    # Logic for storing embeddings in {{ cps.vector_store }}
+    # Using model: {{ cps.embedding_model }}
+    pass
+
+async def search_vector_store(query: str):
+    # Logic for searching in {{ cps.vector_store }}
+    return ["Mock context for: " + query]

@@ -1,0 +1,25 @@
+from pydantic import BaseModel
+from typing import List, Optional
+
+class ChatRequest(BaseModel):
+    message: str
+
+class ChatResponse(BaseModel):
+    reply: str
+
+class IngestResponse(BaseModel):
+    status: str
+    message: str
+
+class QueryRequest(BaseModel):
+    query: str
+
+class QueryResponse(BaseModel):
+    reply: str
+    context_used: List[str]
+
+{% for module in cps.modules %}
+class {{ module|capitalize }}Base(BaseModel):
+    name: str
+    description: Optional[str] = None
+{% endfor %}

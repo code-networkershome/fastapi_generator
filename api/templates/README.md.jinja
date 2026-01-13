@@ -1,0 +1,24 @@
+# {{ cps.project_name }}
+
+{{ cps.description }}
+
+## Setup
+
+1. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+2. Set environment variables:
+   Create a `.env` file based on `.env.example`.
+
+3. Run the application:
+   ```bash
+   uvicorn app.main:app --reload
+   ```
+
+## Features
+{% if cps.features.chat %}- Chat Interface{% endif %}
+{% if cps.features.rag %}- RAG (Retrieval Augmented Generation){% endif %}
+{% if cps.features.streaming %}- Streaming Responses{% endif %}
+{% if cps.features.embeddings %}- Vector Embeddings{% endif %}
