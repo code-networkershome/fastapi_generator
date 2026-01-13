@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ cps.project_name | lower | replace(" ", "-") }}
+  labels:
+    app: {{ cps.project_name | lower | replace(" ", "-") }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ cps.project_name | lower | replace(" ", "-") }}
+  template:
+    metadata:
+      commands:
+        app: {{ cps.project_name | lower | replace(" ", "-") }}
+    spec:
+      containers:
+      - name: {{ cps.project_name | lower | replace(" ", "-") }}
+        image: {{ cps.project_name | lower | replace(" ", "-") }}:latest
+        ports:
+        - containerPort: 8000
+        env:
+        - name: OPENAI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: {{ cps.project_name | lower | replace(" ", "-") }}-secrets
+              key: openai-api-key
+        {% if cps.features.rag %}
+        - name: FEATURE_RAG
+          value: "true"
+        {% endif %}
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "500m"

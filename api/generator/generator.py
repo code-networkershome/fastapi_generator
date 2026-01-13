@@ -74,6 +74,32 @@ def generate_project(cps: CPS) -> Dict[str, str]:
             # Fallback to code-based generation
             from .environment_generator import generate_docker_compose
             files[f"{cps.project_name}/docker-compose.yml"] = generate_docker_compose(cps_dict)
+
+    # Feature: Kubernetes Environment
+    if cps.environment.type == "kubernetes":
+        try:
+            deploy_template = env.get_template("deployment.yaml.jinja")
+            files[f"{cps.project_name}/deployment.yaml"] = deploy_template.render(cps=cps_dict)
+            service_template = env.get_template("service.yaml.jinja")
+            files[f"{cps.project_name}/service.yaml"] = service_template.render(cps=cps_dict)
+        except Exception as e:
+            print(f"Error generating Kubernetes manifests: {e}")
+
+    # Feature: Vercel Environment
+    if cps.environment.type == "vercel":
+        try:
+            vercel_template = env.get_template("vercel.json.jinja")
+            files[f"{cps.project_name}/vercel.json"] = vercel_template.render(cps=cps_dict)
+        except Exception as e:
+            print(f"Error generating Vercel config: {e}")
+
+    # Feature: Production Environment
+    if cps.environment.type == "production":
+        from .environment_generator import generate_production_config
+        try:
+            files[f"{cps.project_name}/PRODUCTION.md"] = generate_production_config(cps_dict)
+        except Exception as e:
+            print(f"Error generating production config: {e}")
     
     # =========================================================================
     # Core Templates

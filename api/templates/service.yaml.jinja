@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ cps.project_name | lower | replace(" ", "-") }}
+spec:
+  selector:
+    app: {{ cps.project_name | lower | replace(" ", "-") }}
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
+  type: LoadBalancer

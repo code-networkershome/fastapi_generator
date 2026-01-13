@@ -168,20 +168,12 @@ def _check_required_env_vars(
         if env_example_content and var_name not in env_example_content:
             errors.append(ValidationError(
                 code="MISSING_ENV_VAR_DOC",
-                message=f"{var_name} is required but not documented in .env.example",
+                message=f"{var_name} is required but missing from .env.example",
                 severity=Severity.ERROR,
                 field="environment",
                 suggestion=f"Add {var_name}=your_value_here to .env.example"
             ))
-        else:
-            errors.append(ValidationError(
-                code="REQUIRED_ENV_VAR",
-                message=f"{var_name} is required: {description}",
-                severity=Severity.ERROR,
-                field="environment",
-                suggestion=f"Ensure {var_name} is set in your deployment environment"
-            ))
-    
+            
     return errors
 
 

@@ -155,6 +155,20 @@ export default function CPSPreview({ cps, setCps, onGenerate, loading }: CPSPrev
                         {/* Environment Config */}
                         <div className="space-y-4 border-t border-white/10 pt-4">
                             <label className="text-xs font-bold text-white/60 uppercase tracking-wider">Environment</label>
+                            <div className="space-y-2 mb-2">
+                                <label className="text-[10px] text-white/40 uppercase">Profile Type</label>
+                                <select
+                                    value={cps.environment?.type || "local"}
+                                    onChange={(e) => updateNested(['environment', 'type'], e.target.value)}
+                                    className="w-full bg-black/20 border border-white/10 rounded p-2 text-sm focus:border-blue-500 outline-none"
+                                >
+                                    <option value="local">Local Development</option>
+                                    <option value="docker">Docker / Containers</option>
+                                    <option value="kubernetes">Kubernetes (K8s)</option>
+                                    <option value="vercel">Vercel (Serverless)</option>
+                                    <option value="production">Production (Generic)</option>
+                                </select>
+                            </div>
                             <div className="grid grid-cols-2 gap-4">
                                 <label className="flex items-center gap-2 text-sm cursor-pointer p-2 bg-white/5 rounded hover:bg-white/10">
                                     <input

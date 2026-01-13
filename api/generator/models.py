@@ -44,7 +44,7 @@ class EnvironmentProfile(BaseModel):
     - No cloud provider assumptions
     - No auto-deployment
     """
-    type: Literal["local", "docker", "production"] = "local"
+    type: Literal["local", "docker", "production", "kubernetes", "vercel"] = "local"
     generate_dockerfile: bool = False
     generate_compose: bool = False
     
